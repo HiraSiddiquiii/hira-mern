@@ -1,10 +1,27 @@
-const transactions = [
+"use client";
+
+import { FormEvent, useState } from "react";
+import Button from "@/components/Button";
+import Card from "@/components/Card";
+import FormInput from "@/components/FormInput";
+import TransactionTable from "@/components/TransactionTable";
+
+type Transaction = {
+  id: number;
+  customer: string;
+  type: "Sale" | "Purchase" | "Expense";
+  date: string;
+  amount: number;
+  status: "Completed" | "Pending";
+};
+
+const initialTransactions: Transaction[] = [
   {
     id: 1,
     customer: "Ahmed Traders",
     type: "Sale",
     date: "09 Aug 2026",
-    amount: "Rs. 25,000",
+    amount: 25000,
     status: "Completed",
   },
   {
@@ -12,7 +29,7 @@ const transactions = [
     customer: "Ali & Sons",
     type: "Purchase",
     date: "08 Aug 2026",
-    amount: "Rs. 12,500",
+    amount: 12500,
     status: "Completed",
   },
   {
@@ -20,7 +37,7 @@ const transactions = [
     customer: "Sana Enterprises",
     type: "Sale",
     date: "08 Aug 2026",
-    amount: "Rs. 18,750",
+    amount: 18750,
     status: "Pending",
   },
   {
@@ -28,7 +45,7 @@ const transactions = [
     customer: "Karim Store",
     type: "Expense",
     date: "07 Aug 2026",
-    amount: "Rs. 7,500",
+    amount: 7500,
     status: "Completed",
   },
   {
@@ -36,17 +53,117 @@ const transactions = [
     customer: "Hassan Electronics",
     type: "Sale",
     date: "06 Aug 2026",
-    amount: "Rs. 31,200",
+    amount: 31200,
     status: "Completed",
   },
 ];
 
 export default function Transactions() {
+  const [transactions, setTransactions] =
+    useState<Transaction[]>(initialTransactions);
+
+  const [showForm, setShowForm] = useState(false);
+
+  const [customer, setCustomer] = useState("");
+  const [type, setType] =
+    useState<Transaction["type"]>("Sale");
+  const [amount, setAmount] = useState("");
+  const [status, setStatus] =
+    useState<Transaction["status"]>("Completed");
+
+  const [errors, setErrors] = useState<{
+    customer?: string;
+    amount?: string;
+  }>({});
+
+  const validateForm = () => {
+    const newErrors: {
+      customer?: string;
+      amount?: string;
+    } = {};
+
+    if (!customer.trim()) {
+      newErrors.customer = "Customer name is required.";
+    }
+
+    if (!amount) {
+      newErrors.amount = "Amount is required.";
+    } else if (Number(amount) <= 0) {
+      newErrors.amount = "Amount must be greater than 0.";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    const newTransaction: Transaction = {
+      id: Date.now(),
+      customer: customer.trim(),
+      type,
+      date: new Date().toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }),
+      amount: Number(amount),
+      status,
+    };
+
+    setTransactions((current) => [
+      newTransaction,
+      ...current,
+    ]);
+
+    setCustomer("");
+    setType("Sale");
+    setAmount("");
+    setStatus("Completed");
+    setErrors({});
+    setShowForm(false);
+  };
+
+  const handleDelete = (id: number) => {
+    setTransactions((current) =>
+      current.filter((transaction) => transaction.id !== id)
+    );
+  };
+
+  const totalSales = transactions
+    .filter((transaction) => transaction.type === "Sale")
+    .reduce(
+      (total, transaction) => total + transaction.amount,
+      0
+    );
+
+  const totalExpenses = transactions
+    .filter(
+      (transaction) =>
+        transaction.type === "Expense" ||
+        transaction.type === "Purchase"
+    )
+    .reduce(
+      (total, transaction) => total + transaction.amount,
+      0
+    );
+
+  const formatAmount = (amount: number) =>
+    `Rs. ${amount.toLocaleString("en-PK")}`;
+
   return (
-    <section className="min-h-[calc(100vh-128px)] px-4 py-8 sm:px-6 lg:px-8">
+    <section className="flex-1 p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl">
+
+        {/* Header */}
         <div className="mb-8">
-          <p className="text-sm font-semibold text-blue-600">
+          <p className="text-sm font-medium text-blue-600">
             Financial Management
           </p>
 
@@ -59,28 +176,28 @@ export default function Transactions() {
           </p>
         </div>
 
+        {/* Summary Cards */}
         <div className="mb-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p className="text-sm text-gray-500">Total Transactions</p>
-            <p className="mt-2 text-2xl font-bold text-gray-900">248</p>
-          </div>
+          <Card
+            title="Total Transactions"
+            value={transactions.length}
+          />
 
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p className="text-sm text-gray-500">Total Sales</p>
-            <p className="mt-2 text-2xl font-bold text-gray-900">
-              Rs. 125,000
-            </p>
-          </div>
+          <Card
+            title="Total Sales"
+            value={formatAmount(totalSales)}
+          />
 
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p className="text-sm text-gray-500">Total Expenses</p>
-            <p className="mt-2 text-2xl font-bold text-gray-900">
-              Rs. 42,000
-            </p>
-          </div>
+          <Card
+            title="Total Expenses"
+            value={formatAmount(totalExpenses)}
+          />
         </div>
 
+        {/* Main Card */}
         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+
+          {/* Card Header */}
           <div className="flex flex-col gap-4 border-b border-gray-200 p-6 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-xl font-bold text-gray-900">
@@ -92,61 +209,120 @@ export default function Transactions() {
               </p>
             </div>
 
-            <button className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
-              + Add Transaction
-            </button>
+            <Button
+              type="button"
+              onClick={() =>
+                setShowForm((current) => !current)
+              }
+            >
+              {showForm
+                ? "Close Form"
+                : "+ Add Transaction"}
+            </Button>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[750px] text-left">
-              <thead className="bg-gray-50">
-                <tr className="text-sm text-gray-500">
-                  <th className="px-6 py-4 font-medium">Customer</th>
-                  <th className="px-6 py-4 font-medium">Type</th>
-                  <th className="px-6 py-4 font-medium">Date</th>
-                  <th className="px-6 py-4 font-medium">Amount</th>
-                  <th className="px-6 py-4 font-medium">Status</th>
-                </tr>
-              </thead>
+          {/* Add Transaction Form */}
+          {showForm && (
+            <div className="border-b border-gray-200 bg-gray-50 p-6">
+              <h3 className="mb-5 text-lg font-bold text-gray-900">
+                Add New Transaction
+              </h3>
 
-              <tbody className="divide-y divide-gray-100">
-                {transactions.map((transaction) => (
-                  <tr
-                    key={transaction.id}
-                    className="transition hover:bg-gray-50"
+              <form
+                onSubmit={handleSubmit}
+                className="grid gap-5 sm:grid-cols-2"
+              >
+                {/* Customer */}
+                <FormInput
+                  label="Customer Name"
+                  id="customer"
+                  value={customer}
+                  placeholder="Enter customer name"
+                  error={errors.customer}
+                  onChange={(event) =>
+                    setCustomer(event.target.value)
+                  }
+                />
+
+                {/* Transaction Type */}
+                <div>
+                  <label
+                    htmlFor="type"
+                    className="mb-2 block text-sm font-medium text-gray-700"
                   >
-                    <td className="px-6 py-4 font-medium text-gray-900">
-                      {transaction.customer}
-                    </td>
+                    Transaction Type
+                  </label>
 
-                    <td className="px-6 py-4 text-gray-600">
-                      {transaction.type}
-                    </td>
+                  <select
+                    id="type"
+                    value={type}
+                    onChange={(event) =>
+                      setType(
+                        event.target.value as Transaction["type"]
+                      )
+                    }
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  >
+                    <option value="Sale">Sale</option>
+                    <option value="Purchase">Purchase</option>
+                    <option value="Expense">Expense</option>
+                  </select>
+                </div>
 
-                    <td className="px-6 py-4 text-gray-600">
-                      {transaction.date}
-                    </td>
+                {/* Amount */}
+                <FormInput
+                  label="Amount (Rs.)"
+                  id="amount"
+                  type="number"
+                  value={amount}
+                  placeholder="Enter amount"
+                  error={errors.amount}
+                  onChange={(event) =>
+                    setAmount(event.target.value)
+                  }
+                />
 
-                    <td className="px-6 py-4 font-semibold text-gray-900">
-                      {transaction.amount}
-                    </td>
+                {/* Status */}
+                <div>
+                  <label
+                    htmlFor="status"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Status
+                  </label>
 
-                    <td className="px-6 py-4">
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          transaction.status === "Completed"
-                            ? "bg-green-50 text-green-700"
-                            : "bg-yellow-50 text-yellow-700"
-                        }`}
-                      >
-                        {transaction.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                  <select
+                    id="status"
+                    value={status}
+                    onChange={(event) =>
+                      setStatus(
+                        event.target.value as Transaction["status"]
+                      )
+                    }
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  >
+                    <option value="Completed">Completed</option>
+                    <option value="Pending">Pending</option>
+                  </select>
+                </div>
+
+                {/* Submit */}
+                <div className="sm:col-span-2">
+                  <Button type="submit">
+                    Save Transaction
+                  </Button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {/* Reusable Transaction Table */}
+          <TransactionTable
+            transactions={transactions}
+            formatAmount={formatAmount}
+            onDelete={handleDelete}
+          />
+
         </div>
       </div>
     </section>

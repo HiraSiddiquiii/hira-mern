@@ -1,134 +1,73 @@
-# HisabDo Capstone – Next.js
+## Day 10 – Core Functionality Implementation
 
-A modern and responsive business management web interface inspired by the HisabDo platform. This project was developed as part of the **MERN / Next.js Internship – Day 9 Capstone Project**.
+### Overview
 
-## 🚀 Project Overview
+On Day 10, the HisabDo Capstone project was extended from a UI-based prototype into a functional business management application.
 
-The project focuses on recreating a clean and modern business management experience using **Next.js, TypeScript, and Tailwind CSS**.
+### Implemented Features
 
-The UI includes business overview, dashboard statistics, transaction management, reports, settings, and login interfaces.
+- Working Dashboard with business statistics
+- Functional Transactions Management module
+- Add new transactions
+- Delete transactions
+- Dynamic transaction totals
+- Sales and expense calculations
+- Transaction status management
+- Form validation
+- Responsive transaction table
+- Responsive Dashboard layout
+- Navigation between application pages
 
-## ✨ Features
+### Reusable Components
 
-* Responsive navigation bar
-* Mobile-friendly hamburger menu
-* Business management homepage
-* Dashboard overview
-* Transaction management page
-* Business reports page
-* Account and business settings
-* Login interface
-* Responsive desktop, tablet, and mobile layouts
-* Reusable React components
-* Next.js App Router
-* TypeScript
-* Tailwind CSS
+The application uses reusable components to maintain a clean and scalable architecture:
 
-## 📄 Main Pages
+- `Button.tsx` – Reusable buttons with multiple variants
+- `Card.tsx` – Reusable summary/stat cards
+- `FormInput.tsx` – Reusable validated form input
+- `TransactionTable.tsx` – Reusable transactions table
+- `Navbar.tsx` – Application navigation
+- `Sidebar.tsx` – Dashboard navigation
+- `Footer.tsx` – Application footer
+- `StatCard.tsx` – Dashboard statistics component
 
-| Page         | Route           |
-| ------------ | --------------- |
-| Home         | `/`             |
-| Login        | `/login`        |
-| Dashboard    | `/dashboard`    |
-| Transactions | `/transactions` |
-| Reports      | `/reports`      |
-| Settings     | `/settings`     |
+### Form Validation
 
-## 🛠️ Technologies Used
+Transaction form validation includes:
 
-* Next.js
-* React
-* TypeScript
-* Tailwind CSS
-* Next.js App Router
-* ESLint
-* Git & GitHub
+- Customer name is required
+- Transaction amount is required
+- Amount must be greater than zero
+- Validation errors are displayed clearly to the user
 
-## 📁 Project Structure
+### Responsive Design
 
-```text
-hisabdo-capstone/
-│
-├── app/
-│   ├── dashboard/
-│   │   └── page.tsx
-│   ├── login/
-│   │   └── page.tsx
-│   ├── reports/
-│   │   └── page.tsx
-│   ├── settings/
-│   │   └── page.tsx
-│   ├── transactions/
-│   │   └── page.tsx
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx
-│
-├── components/
-│   ├── Footer.tsx
-│   ├── Navbar.tsx
-│   ├── Sidebar.tsx
-│   └── StatCard.tsx
-│
-├── public/
-├── package.json
-├── tsconfig.json
-└── README.md
-```
+The application is designed to work across:
 
-## 💻 Getting Started
+- Desktop
+- Tablet
+- Mobile devices
 
-First, install the project dependencies:
+### Day 10 Testing
 
-```bash
-npm install
-```
+The following functionality was tested successfully:
 
-Run the development server:
+- Dashboard navigation
+- Transaction form opening and closing
+- Required field validation
+- Adding transactions
+- Dynamic transaction count
+- Dynamic sales and expense totals
+- Deleting transactions
+- Responsive layout
 
-```bash
-npm run dev
-```
+### Day 10 Screenshots
 
-Open:
+Screenshots are available in the `screenshots` folder:
 
-```text
-http://localhost:3000
-```
-
-## 🏗️ Production Build
-
-To create a production build:
-
-```bash
-npm run build
-```
-
-To start the production server:
-
-```bash
-npm start
-```
-
-## 📱 Responsive Design
-
-The interface is designed to work across:
-
-* Desktop
-* Tablet
-* Mobile
-
-Tailwind CSS responsive utilities are used throughout the application.
-
-## 🎯 Internship Task
-
-**Track:** MERN / Next.js
-**Task:** Day 9 – Capstone Project
-**Focus:** Next.js setup, routing, reusable components, UI implementation, responsiveness, and code quality.
-
-## 👩‍💻 Developer
-
-**Hira Siddiqui**
-
-MERN / Next.js Track – Internship Capstone Project
+- Day10 Dashboard
+- Day10 Transactions
+- Day10 Add Transaction
+- Day10 Validation
+- Day10 Added Transaction
+- Day10 Mobile Responsive
