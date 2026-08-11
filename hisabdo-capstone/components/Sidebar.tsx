@@ -24,6 +24,13 @@ export default function Sidebar() {
           </Link>
 
           <Link
+            href="/categories"
+            className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50"
+          >
+            Categories
+          </Link>
+
+          <Link
             href="/reports"
             className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50"
           >

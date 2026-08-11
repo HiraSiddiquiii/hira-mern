@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -18,7 +19,15 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen bg-gray-50 text-gray-900">
         <Navbar />
-        <main>{children}</main>
+
+        <div className="flex min-h-[calc(100vh-64px)]">
+          <Sidebar />
+
+          <main className="flex-1">
+            {children}
+          </main>
+        </div>
+
         <Footer />
       </body>
     </html>
