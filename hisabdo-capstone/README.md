@@ -242,3 +242,58 @@ npm run build
 ```
 
 The production build completed successfully with all application routes generated without TypeScript or compilation errors.
+
+## Day 12 – Capstone Project
+
+### Third Core Module – Reports
+
+The Reports module was implemented as the third functional core module of the HisabDo-inspired business management application.
+
+### Completed Features
+
+- Reports list/table view
+- Add Report functionality
+- Edit Report functionality
+- Delete Report functionality
+- Form validation
+- Duplicate report validation
+- Loading state
+- Empty state
+- Error state structure
+- Report summary cards
+- Responsive reports table
+- Active sidebar navigation
+- Authentication-ready route structure
+
+### Functional Modules
+
+1. Transactions
+2. Categories
+3. Reports
+
+### Navigation
+
+The application provides navigation between:
+
+- Dashboard
+- Transactions
+- Categories
+- Reports
+- Settings
+- Login
+
+### Day 12 Screenshots
+
+- `screenshots/Reports-Day12.PNG`
+- `screenshots/Add-Report-Day12.PNG`
+- `screenshots/Report-Validation-Day12.PNG`
+- `screenshots/Edit-Report-Day12.PNG`
+- `screenshots/Delete-Report-Day12.PNG`
+
+### Production Build
+
+The application was successfully tested with:
+
+`npm run build`
+
+Next.js production build completed successfully with TypeScript validation and static page generation.
