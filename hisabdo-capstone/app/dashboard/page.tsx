@@ -1,4 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { AuthUser, getStoredUser } from "@/lib/auth";
 import StatCard from "@/components/StatCard";
 
 const transactions = [
@@ -29,6 +34,33 @@ const transactions = [
 ];
 
 export default function Dashboard() {
+  const router = useRouter();
+
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    const storedUser = getStoredUser();
+
+    if (!storedUser) {
+      router.replace("/login");
+      return;
+    }
+
+    setUser(storedUser);
+    setCheckingAuth(false);
+  }, [router]);
+
+  if (checkingAuth) {
+    return (
+      <section className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-sm text-gray-500">
+          Checking authentication...
+        </p>
+      </section>
+    );
+  }
+
   return (
     <section className="flex-1 p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl">
@@ -45,6 +77,12 @@ export default function Dashboard() {
           <p className="mt-2 text-gray-500">
             Monitor your business performance from one place.
           </p>
+
+          {user && (
+            <p className="mt-3 text-sm font-medium text-gray-600">
+              Welcome, {user.name}
+            </p>
+          )}
         </div>
 
         {/* Statistics */}
@@ -151,6 +189,7 @@ export default function Dashboard() {
             <h3 className="font-bold text-gray-900">
               Add Transaction
             </h3>
+
             <p className="mt-2 text-sm text-gray-500">
               Record a new sale, purchase, or expense.
             </p>
@@ -163,6 +202,7 @@ export default function Dashboard() {
             <h3 className="font-bold text-gray-900">
               View Reports
             </h3>
+
             <p className="mt-2 text-sm text-gray-500">
               Review your business performance and reports.
             </p>
@@ -175,6 +215,7 @@ export default function Dashboard() {
             <h3 className="font-bold text-gray-900">
               Account Settings
             </h3>
+
             <p className="mt-2 text-sm text-gray-500">
               Manage your application settings.
             </p>
