@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { saveUser } from "@/lib/auth";
+import { registerUser } from "@/lib/auth";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -68,10 +68,21 @@ export default function RegisterPage() {
     setErrors({});
     setIsSubmitting(true);
 
-    saveUser({
-      name: name.trim(),
-      email: email.trim(),
-    });
+    const result = registerUser(
+      name.trim(),
+      email.trim(),
+      password
+    );
+
+    if (!result.success) {
+      setIsSubmitting(false);
+
+      setErrors({
+        general: result.message,
+      });
+
+      return;
+    }
 
     window.location.href = "/dashboard";
   };
@@ -142,7 +153,9 @@ export default function RegisterPage() {
               />
 
               {errors.name && (
-                <p className="mt-2 text-sm text-red-600">{errors.name}</p>
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.name}
+                </p>
               )}
             </div>
 
@@ -178,7 +191,9 @@ export default function RegisterPage() {
               />
 
               {errors.email && (
-                <p className="mt-2 text-sm text-red-600">{errors.email}</p>
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.email}
+                </p>
               )}
             </div>
 
@@ -265,7 +280,9 @@ export default function RegisterPage() {
               disabled={isSubmitting}
               className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {isSubmitting ? "Creating Account..." : "Create Account"}
+              {isSubmitting
+                ? "Creating Account..."
+                : "Create Account"}
             </button>
           </form>
 

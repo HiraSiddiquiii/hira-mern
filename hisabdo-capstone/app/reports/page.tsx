@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 type Report = {
   id: number;
@@ -39,25 +40,19 @@ const initialReports: Report[] = [
 ];
 
 export default function ReportsPage() {
-  const [reports, setReports] =
-    useState<Report[]>(initialReports);
+  const [reports, setReports] = useState<Report[]>(initialReports);
 
   const [name, setName] = useState("");
-  const [type, setType] =
-    useState<Report["type"]>("Sales");
-  const [period, setPeriod] =
-    useState<Report["period"]>("Monthly");
+  const [type, setType] = useState<Report["type"]>("Sales");
+  const [period, setPeriod] = useState<Report["period"]>("Monthly");
   const [amount, setAmount] = useState("");
-  const [status, setStatus] =
-    useState<Report["status"]>("Generated");
+  const [status, setStatus] = useState<Report["status"]>("Generated");
 
-  const [editingId, setEditingId] =
-    useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [validationError, setValidationError] =
-    useState("");
+  const [validationError, setValidationError] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -91,9 +86,7 @@ export default function ReportsPage() {
     }
 
     if (trimmedName.length < 3) {
-      setValidationError(
-        "Report name must be at least 3 characters."
-      );
+      setValidationError("Report name must be at least 3 characters.");
       return;
     }
 
@@ -103,23 +96,18 @@ export default function ReportsPage() {
     }
 
     if (Number(amount) <= 0) {
-      setValidationError(
-        "Report amount must be greater than 0."
-      );
+      setValidationError("Report amount must be greater than 0.");
       return;
     }
 
     const duplicate = reports.some(
       (report) =>
-        report.name.toLowerCase() ===
-          trimmedName.toLowerCase() &&
+        report.name.toLowerCase() === trimmedName.toLowerCase() &&
         report.id !== editingId
     );
 
     if (duplicate) {
-      setValidationError(
-        "A report with this name already exists."
-      );
+      setValidationError("A report with this name already exists.");
       return;
     }
 
@@ -148,10 +136,7 @@ export default function ReportsPage() {
         status,
       };
 
-      setReports((current) => [
-        ...current,
-        newReport,
-      ]);
+      setReports((current) => [newReport, ...current]);
     }
 
     resetForm();
@@ -185,414 +170,418 @@ export default function ReportsPage() {
 
   if (loading) {
     return (
-      <section className="flex-1 p-4 sm:p-6 lg:p-8">
-        <div className="mx-auto flex min-h-[400px] max-w-7xl items-center justify-center">
-          <div className="rounded-2xl border border-gray-200 bg-white px-8 py-10 text-center shadow-sm">
-            <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-blue-600"></div>
+      <ProtectedRoute>
+        <section className="flex-1 p-4 sm:p-6 lg:p-8">
+          <div className="mx-auto flex min-h-[400px] max-w-7xl items-center justify-center">
+            <div className="rounded-2xl border border-gray-200 bg-white px-8 py-10 text-center shadow-sm">
+              <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-blue-600" />
 
-            <p className="text-sm font-medium text-gray-600">
-              Loading reports...
-            </p>
+              <p className="text-sm font-medium text-gray-600">
+                Loading reports...
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ProtectedRoute>
     );
   }
 
   if (error) {
     return (
-      <section className="flex-1 p-4 sm:p-6 lg:p-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center">
-            <h2 className="text-xl font-bold text-red-700">
-              Something went wrong
-            </h2>
+      <ProtectedRoute>
+        <section className="flex-1 p-4 sm:p-6 lg:p-8">
+          <div className="mx-auto max-w-7xl">
+            <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center">
+              <h2 className="text-xl font-bold text-red-700">
+                Something went wrong
+              </h2>
 
-            <p className="mt-2 text-sm text-red-600">
-              {error}
-            </p>
+              <p className="mt-2 text-sm text-red-600">
+                {error}
+              </p>
 
-            <button
-              onClick={() => setError("")}
-              className="mt-5 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
-            >
-              Try Again
-            </button>
+              <button
+                onClick={() => setError("")}
+                className="mt-5 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+              >
+                Try Again
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ProtectedRoute>
     );
   }
 
   return (
-    <section className="flex-1 p-4 sm:p-6 lg:p-8">
-      <div className="mx-auto max-w-7xl">
+    <ProtectedRoute>
+      <section className="flex-1 p-4 sm:p-6 lg:p-8">
+        <div className="mx-auto max-w-7xl">
 
-        {/* Header */}
-        <div className="mb-8">
-          <p className="text-sm font-medium text-blue-600">
-            Business Analytics
-          </p>
-
-          <h1 className="mt-1 text-3xl font-bold text-gray-900">
-            Reports
-          </h1>
-
-          <p className="mt-2 text-gray-500">
-            Create and manage financial reports for your business.
-          </p>
-        </div>
-
-        {/* Summary Cards */}
-        <div className="mb-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p className="text-sm text-gray-500">
-              Total Reports
+          {/* Header */}
+          <div className="mb-8">
+            <p className="text-sm font-medium text-blue-600">
+              Business Analytics
             </p>
 
-            <p className="mt-2 text-2xl font-bold text-gray-900">
-              {reports.length}
+            <h1 className="mt-1 text-3xl font-bold text-gray-900">
+              Reports
+            </h1>
+
+            <p className="mt-2 text-gray-500">
+              Create and manage financial reports for your business.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p className="text-sm text-gray-500">
-              Generated Reports
-            </p>
+          {/* Summary Cards */}
+          <div className="mb-6 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+              <p className="text-sm text-gray-500">
+                Total Reports
+              </p>
 
-            <p className="mt-2 text-2xl font-bold text-green-600">
-              {
-                reports.filter(
-                  (report) => report.status === "Generated"
-                ).length
-              }
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p className="text-sm text-gray-500">
-              Total Amount
-            </p>
-
-            <p className="mt-2 text-2xl font-bold text-blue-600">
-              {formatAmount(
-                reports.reduce(
-                  (total, report) =>
-                    total + report.amount,
-                  0
-                )
-              )}
-            </p>
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
-
-          {/* Form */}
-          <div className="h-fit rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-gray-900">
-                {editingId !== null
-                  ? "Edit Report"
-                  : "Add Report"}
-              </h2>
-
-              <p className="mt-1 text-sm text-gray-500">
-                {editingId !== null
-                  ? "Update the selected report."
-                  : "Create a new financial report."}
+              <p className="mt-2 text-2xl font-bold text-gray-900">
+                {reports.length}
               </p>
             </div>
 
-            <form
-              onSubmit={handleSubmit}
-              className="space-y-5"
-            >
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+              <p className="text-sm text-gray-500">
+                Generated Reports
+              </p>
 
-              {/* Report Name */}
-              <div>
-                <label
-                  htmlFor="reportName"
-                  className="mb-2 block text-sm font-medium text-gray-700"
-                >
-                  Report Name
-                </label>
+              <p className="mt-2 text-2xl font-bold text-green-600">
+                {
+                  reports.filter(
+                    (report) => report.status === "Generated"
+                  ).length
+                }
+              </p>
+            </div>
 
-                <input
-                  id="reportName"
-                  type="text"
-                  value={name}
-                  onChange={(event) =>
-                    setName(event.target.value)
-                  }
-                  placeholder="e.g. September Sales Report"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                />
-              </div>
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+              <p className="text-sm text-gray-500">
+                Total Amount
+              </p>
 
-              {/* Report Type */}
-              <div>
-                <label
-                  htmlFor="reportType"
-                  className="mb-2 block text-sm font-medium text-gray-700"
-                >
-                  Report Type
-                </label>
-
-                <select
-                  id="reportType"
-                  value={type}
-                  onChange={(event) =>
-                    setType(
-                      event.target.value as Report["type"]
-                    )
-                  }
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                >
-                  <option value="Sales">Sales</option>
-                  <option value="Expenses">Expenses</option>
-                  <option value="Profit & Loss">
-                    Profit & Loss
-                  </option>
-                </select>
-              </div>
-
-              {/* Period */}
-              <div>
-                <label
-                  htmlFor="reportPeriod"
-                  className="mb-2 block text-sm font-medium text-gray-700"
-                >
-                  Report Period
-                </label>
-
-                <select
-                  id="reportPeriod"
-                  value={period}
-                  onChange={(event) =>
-                    setPeriod(
-                      event.target.value as Report["period"]
-                    )
-                  }
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                >
-                  <option value="Weekly">Weekly</option>
-                  <option value="Monthly">Monthly</option>
-                  <option value="Yearly">Yearly</option>
-                </select>
-              </div>
-
-              {/* Amount */}
-              <div>
-                <label
-                  htmlFor="reportAmount"
-                  className="mb-2 block text-sm font-medium text-gray-700"
-                >
-                  Amount (Rs.)
-                </label>
-
-                <input
-                  id="reportAmount"
-                  type="number"
-                  value={amount}
-                  onChange={(event) =>
-                    setAmount(event.target.value)
-                  }
-                  placeholder="Enter amount"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                />
-              </div>
-
-              {/* Status */}
-              <div>
-                <label
-                  htmlFor="reportStatus"
-                  className="mb-2 block text-sm font-medium text-gray-700"
-                >
-                  Status
-                </label>
-
-                <select
-                  id="reportStatus"
-                  value={status}
-                  onChange={(event) =>
-                    setStatus(
-                      event.target.value as Report["status"]
-                    )
-                  }
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                >
-                  <option value="Generated">
-                    Generated
-                  </option>
-
-                  <option value="Pending">
-                    Pending
-                  </option>
-                </select>
-              </div>
-
-              {/* Validation */}
-              {validationError && (
-                <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-                  <p className="text-sm font-medium text-red-600">
-                    {validationError}
-                  </p>
-                </div>
-              )}
-
-              {/* Buttons */}
-              <div className="flex flex-col gap-3">
-                <button
-                  type="submit"
-                  className="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-                >
-                  {editingId !== null
-                    ? "Update Report"
-                    : "Add Report"}
-                </button>
-
-                {editingId !== null && (
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="rounded-lg border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
-                  >
-                    Cancel
-                  </button>
+              <p className="mt-2 text-2xl font-bold text-blue-600">
+                {formatAmount(
+                  reports.reduce(
+                    (total, report) => total + report.amount,
+                    0
+                  )
                 )}
-              </div>
-            </form>
-          </div>
-
-          {/* Reports Table */}
-          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-
-            <div className="border-b border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900">
-                Reports List
-              </h2>
-
-              <p className="mt-1 text-sm text-gray-500">
-                {reports.length}{" "}
-                {reports.length === 1
-                  ? "report"
-                  : "reports"}{" "}
-                available
               </p>
             </div>
+          </div>
 
-            {reports.length === 0 ? (
-              <div className="px-6 py-16 text-center">
-                <h3 className="text-lg font-bold text-gray-900">
-                  No reports found
-                </h3>
+          {/* Main Content */}
+          <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
 
-                <p className="mt-2 text-sm text-gray-500">
-                  Start by creating your first financial report.
+            {/* Form */}
+            <div className="h-fit rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900">
+                  {editingId !== null
+                    ? "Edit Report"
+                    : "Add Report"}
+                </h2>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  {editingId !== null
+                    ? "Update the selected report."
+                    : "Create a new financial report."}
                 </p>
               </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[850px] text-left">
 
-                  <thead className="bg-gray-50 text-sm text-gray-500">
-                    <tr>
-                      <th className="px-6 py-4 font-medium">
-                        Report
-                      </th>
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-5"
+              >
 
-                      <th className="px-6 py-4 font-medium">
-                        Type
-                      </th>
+                {/* Report Name */}
+                <div>
+                  <label
+                    htmlFor="reportName"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Report Name
+                  </label>
 
-                      <th className="px-6 py-4 font-medium">
-                        Period
-                      </th>
+                  <input
+                    id="reportName"
+                    type="text"
+                    value={name}
+                    onChange={(event) =>
+                      setName(event.target.value)
+                    }
+                    placeholder="e.g. September Sales Report"
+                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  />
+                </div>
 
-                      <th className="px-6 py-4 font-medium">
-                        Amount
-                      </th>
+                {/* Report Type */}
+                <div>
+                  <label
+                    htmlFor="reportType"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Report Type
+                  </label>
 
-                      <th className="px-6 py-4 font-medium">
-                        Status
-                      </th>
+                  <select
+                    id="reportType"
+                    value={type}
+                    onChange={(event) =>
+                      setType(
+                        event.target.value as Report["type"]
+                      )
+                    }
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  >
+                    <option value="Sales">Sales</option>
+                    <option value="Expenses">Expenses</option>
+                    <option value="Profit & Loss">
+                      Profit & Loss
+                    </option>
+                  </select>
+                </div>
 
-                      <th className="px-6 py-4 font-medium">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
+                {/* Period */}
+                <div>
+                  <label
+                    htmlFor="reportPeriod"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Report Period
+                  </label>
 
-                  <tbody className="divide-y divide-gray-100">
-                    {reports.map((report) => (
-                      <tr
-                        key={report.id}
-                        className="transition hover:bg-gray-50"
-                      >
-                        <td className="px-6 py-4 font-medium text-gray-900">
-                          {report.name}
-                        </td>
+                  <select
+                    id="reportPeriod"
+                    value={period}
+                    onChange={(event) =>
+                      setPeriod(
+                        event.target.value as Report["period"]
+                      )
+                    }
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  >
+                    <option value="Weekly">Weekly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Yearly">Yearly</option>
+                  </select>
+                </div>
 
-                        <td className="px-6 py-4 text-sm text-gray-600">
-                          {report.type}
-                        </td>
+                {/* Amount */}
+                <div>
+                  <label
+                    htmlFor="reportAmount"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Amount (Rs.)
+                  </label>
 
-                        <td className="px-6 py-4 text-sm text-gray-600">
-                          {report.period}
-                        </td>
+                  <input
+                    id="reportAmount"
+                    type="number"
+                    value={amount}
+                    onChange={(event) =>
+                      setAmount(event.target.value)
+                    }
+                    placeholder="Enter amount"
+                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  />
+                </div>
 
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                          {formatAmount(report.amount)}
-                        </td>
+                {/* Status */}
+                <div>
+                  <label
+                    htmlFor="reportStatus"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Status
+                  </label>
 
-                        <td className="px-6 py-4">
-                          <span
-                            className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                              report.status === "Generated"
-                                ? "bg-green-50 text-green-700"
-                                : "bg-yellow-50 text-yellow-700"
-                            }`}
-                          >
-                            {report.status}
-                          </span>
-                        </td>
+                  <select
+                    id="reportStatus"
+                    value={status}
+                    onChange={(event) =>
+                      setStatus(
+                        event.target.value as Report["status"]
+                      )
+                    }
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  >
+                    <option value="Generated">
+                      Generated
+                    </option>
 
-                        <td className="px-6 py-4">
-                          <div className="flex flex-wrap gap-2">
+                    <option value="Pending">
+                      Pending
+                    </option>
+                  </select>
+                </div>
 
-                            <button
-                              onClick={() =>
-                                handleEdit(report)
-                              }
-                              className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-600 transition hover:bg-blue-100"
-                            >
-                              Edit
-                            </button>
+                {/* Validation */}
+                {validationError && (
+                  <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+                    <p className="text-sm font-medium text-red-600">
+                      {validationError}
+                    </p>
+                  </div>
+                )}
 
-                            <button
-                              onClick={() =>
-                                handleDelete(report.id)
-                              }
-                              className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-100"
-                            >
-                              Delete
-                            </button>
+                {/* Buttons */}
+                <div className="flex flex-col gap-3">
+                  <button
+                    type="submit"
+                    className="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                  >
+                    {editingId !== null
+                      ? "Update Report"
+                      : "Add Report"}
+                  </button>
 
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
+                  {editingId !== null && (
+                    <button
+                      type="button"
+                      onClick={resetForm}
+                      className="rounded-lg border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
 
-                </table>
+            {/* Reports Table */}
+            <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+
+              <div className="border-b border-gray-200 p-6">
+                <h2 className="text-xl font-bold text-gray-900">
+                  Reports List
+                </h2>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  {reports.length}{" "}
+                  {reports.length === 1
+                    ? "report"
+                    : "reports"}{" "}
+                  available
+                </p>
               </div>
-            )}
 
+              {reports.length === 0 ? (
+                <div className="px-6 py-16 text-center">
+                  <h3 className="text-lg font-bold text-gray-900">
+                    No reports found
+                  </h3>
+
+                  <p className="mt-2 text-sm text-gray-500">
+                    Start by creating your first financial report.
+                  </p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[850px] text-left">
+
+                    <thead className="bg-gray-50 text-sm text-gray-500">
+                      <tr>
+                        <th className="px-6 py-4 font-medium">
+                          Report
+                        </th>
+
+                        <th className="px-6 py-4 font-medium">
+                          Type
+                        </th>
+
+                        <th className="px-6 py-4 font-medium">
+                          Period
+                        </th>
+
+                        <th className="px-6 py-4 font-medium">
+                          Amount
+                        </th>
+
+                        <th className="px-6 py-4 font-medium">
+                          Status
+                        </th>
+
+                        <th className="px-6 py-4 font-medium">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody className="divide-y divide-gray-100">
+                      {reports.map((report) => (
+                        <tr
+                          key={report.id}
+                          className="transition hover:bg-gray-50"
+                        >
+                          <td className="px-6 py-4 font-medium text-gray-900">
+                            {report.name}
+                          </td>
+
+                          <td className="px-6 py-4 text-sm text-gray-600">
+                            {report.type}
+                          </td>
+
+                          <td className="px-6 py-4 text-sm text-gray-600">
+                            {report.period}
+                          </td>
+
+                          <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                            {formatAmount(report.amount)}
+                          </td>
+
+                          <td className="px-6 py-4">
+                            <span
+                              className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                                report.status === "Generated"
+                                  ? "bg-green-50 text-green-700"
+                                  : "bg-yellow-50 text-yellow-700"
+                              }`}
+                            >
+                              {report.status}
+                            </span>
+                          </td>
+
+                          <td className="px-6 py-4">
+                            <div className="flex flex-wrap gap-2">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleEdit(report)
+                                }
+                                className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-600 transition hover:bg-blue-100"
+                              >
+                                Edit
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleDelete(report.id)
+                                }
+                                className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-100"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+
+                  </table>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </ProtectedRoute>
   );
 }

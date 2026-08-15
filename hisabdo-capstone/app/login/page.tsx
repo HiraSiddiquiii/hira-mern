@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { saveUser } from "@/lib/auth";
+import { loginUser } from "@/lib/auth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -50,10 +50,17 @@ export default function LoginPage() {
     setErrors({});
     setIsSubmitting(true);
 
-    saveUser({
-      name: "HisabDo User",
-      email: email.trim(),
-    });
+    const result = loginUser(email.trim(), password);
+
+    if (!result.success) {
+      setIsSubmitting(false);
+
+      setErrors({
+        general: result.message,
+      });
+
+      return;
+    }
 
     window.location.href = "/dashboard";
   };

@@ -297,3 +297,209 @@ The application was successfully tested with:
 `npm run build`
 
 Next.js production build completed successfully with TypeScript validation and static page generation.
+---
+
+# Final Project Features
+
+The HisabDo Capstone project was further enhanced with authentication, protected routes, settings management, and account preferences.
+
+## Authentication
+
+The application includes a functional client-side authentication system.
+
+### Registration
+
+Users can create an account using:
+
+- Name
+- Email
+- Password
+
+Duplicate email registration is prevented.
+
+### Login
+
+Registered users can log in using their email and password.
+
+Invalid credentials display an appropriate validation message.
+
+### Protected Routes
+
+Authenticated pages are protected using a reusable `ProtectedRoute` component.
+
+Protected modules include:
+
+- Dashboard
+- Transactions
+- Categories
+- Reports
+- Settings
+
+Unauthenticated users attempting to access protected pages are redirected to the Login page.
+
+## Settings Module
+
+The Settings module provides account and business management functionality.
+
+### Business Information
+
+Users can update:
+
+- Business Name
+- Business Email
+- Phone Number
+- Currency
+- Business Address
+
+### Account Preferences
+
+Users can control:
+
+- Email Notifications
+- Monthly Reports
+
+Preferences can be saved and persist using browser local storage.
+
+### Account Management
+
+The Settings page also includes:
+
+- Save Changes functionality
+- Save Preferences functionality
+- Form validation
+- Success and error messages
+- Delete Account confirmation
+- Redirect to Login after account deletion
+
+## Data Persistence
+
+The application uses browser `localStorage` for client-side persistence.
+
+Stored application data includes:
+
+- Authentication state
+- Registered users
+- Business settings
+- Account preferences
+- Application data
+
+## Final Functional Modules
+
+The completed application contains:
+
+1. Dashboard
+2. Transactions Management
+3. Categories Management
+4. Reports Management
+5. Settings
+6. Authentication
+
+## CRUD Functionality
+
+The application demonstrates CRUD-style functionality across the main business modules.
+
+### Transactions
+
+- Create
+- Read
+- Update
+- Delete
+
+### Categories
+
+- Create
+- Read
+- Update
+- Delete
+
+### Reports
+
+- Create
+- Read
+- Update
+- Delete
+
+## Final Testing
+
+The following functionality was tested successfully:
+
+- User registration
+- User login
+- Invalid login validation
+- Protected route redirection
+- Dashboard access
+- Transaction CRUD
+- Category CRUD
+- Report CRUD
+- Settings updates
+- Account preferences
+- Local storage persistence
+- Delete account flow
+- Responsive layouts
+- Form validation
+- Loading states
+- Empty states
+- Error states
+
+## Final Project Status
+
+The HisabDo Capstone project has been completed as a functional business management web application.
+
+### Final Modules
+
+| Module | Status |
+|---|---|
+| Dashboard | Completed |
+| Transactions | Completed |
+| Categories | Completed |
+| Reports | Completed |
+| Settings | Completed |
+| Authentication | Completed |
+| Protected Routes | Completed |
+| Responsive UI | Completed |
+| Form Validation | Completed |
+| Local Storage | Completed |
+
+## Final Technology Stack
+
+- Next.js 16.3.0
+- React
+- TypeScript
+- Tailwind CSS
+- JavaScript
+- Git
+- GitHub
+- Browser Local Storage
+
+## Final Project Structure
+
+```text
+hisabdo-capstone/
+├── app/
+│   ├── categories/
+│   ├── dashboard/
+│   ├── login/
+│   ├── register/
+│   ├── reports/
+│   ├── settings/
+│   ├── transactions/
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── Button.tsx
+│   ├── Card.tsx
+│   ├── Footer.tsx
+│   ├── FormInput.tsx
+│   ├── Navbar.tsx
+│   ├── ProtectedRoute.tsx
+│   ├── Sidebar.tsx
+│   ├── StatCard.tsx
+│   └── TransactionTable.tsx
+├── lib/
+│   └── auth.ts
+├── public/
+├── screenshots/
+├── package.json
+├── README.md
+└── tsconfig.json
